@@ -3,6 +3,8 @@ package com.extellon.blogs.mapper;
 import com.extellon.blogs.dto.PostDto;
 import com.extellon.blogs.entity.Post;
 
+import java.util.stream.Collectors;
+
 public class PostMapper {
 
     // map Post entity to PostDto
@@ -10,11 +12,15 @@ public class PostMapper {
         return PostDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
+                .category(post.getCategory())
                 .url(post.getUrl())
                 .content(post.getContent())
                 .shortDescription(post.getShortDescription())
                 .createdOn(post.getCreatedOn())
                 .updatedOn(post.getUpdatedOn())
+                .comments(post.getComments().stream()
+                        .map((comment) -> CommentMapper.mapToCommentDto(comment))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -23,6 +29,7 @@ public class PostMapper {
         return Post.builder()
                 .id(postDto.getId())
                 .title(postDto.getTitle())
+                .category(postDto.getCategory())
                 .content(postDto.getContent())
                 .url(postDto.getUrl())
                 .shortDescription(postDto.getShortDescription())
