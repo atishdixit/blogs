@@ -4,26 +4,24 @@ import com.extellon.blogs.dto.PostDto;
 import com.extellon.blogs.entity.Post;
 import com.extellon.blogs.entity.User;
 import com.extellon.blogs.mapper.PostMapper;
+import com.extellon.blogs.mapper.PostMapper_;
 import com.extellon.blogs.repository.PostRepository;
 import com.extellon.blogs.repository.UserRepository;
 import com.extellon.blogs.service.PostService;
 import com.extellon.blogs.util.SecurityUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private PostRepository postRepository;
     private UserRepository userRepository;
-
-    public PostServiceImpl(PostRepository postRepository,
-                           UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
+    private PostMapper_ postMapper_;
 
     @Override
     public List<PostDto> findAllPosts() {
@@ -47,7 +45,7 @@ public class PostServiceImpl implements PostService {
     public void createPost(PostDto postDto) {
         String email = SecurityUtils.getCurrentUser().getUsername();
         User user = userRepository.findByEmail(email);
-        Post post = PostMapper.mapToPost(postDto);
+        Post post = postMapper_.PostDtoToPostEntity(postDto);
         post.setCreatedBy(user);
         postRepository.save(post);
     }

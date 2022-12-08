@@ -5,6 +5,7 @@ import com.extellon.blogs.dto.PostDto;
 import com.extellon.blogs.service.CommentService;
 import com.extellon.blogs.service.PostService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,17 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@AllArgsConstructor
 public class CommentController {
 
     private CommentService commentService;
     private PostService postService;
 
-    public CommentController(CommentService commentService,PostService postService) {
-        this.commentService = commentService;
-        this.postService = postService;
-    }
-
-    // handler method to create form submit request
     @PostMapping("/{postUrl}/comments")
     public String createComment(@PathVariable("postUrl") String postUrl,
                                 @Valid @ModelAttribute("comment") CommentDto commentDto,

@@ -2,11 +2,13 @@ package com.extellon.blogs.controller;
 
 import com.extellon.blogs.dto.CommentDto;
 import com.extellon.blogs.dto.PostDto;
+import com.extellon.blogs.mapper.PostMapper_;
 import com.extellon.blogs.service.CommentService;
 import com.extellon.blogs.service.PostService;
 import com.extellon.blogs.util.SecurityUtils;
 import com.extellon.blogs.util.ROLE;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,17 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class PostController {
 
     private PostService postService;
     private CommentService commentService;
 
-    public PostController(PostService postService, CommentService commentService) {
-        this.postService = postService;
-        this.commentService = commentService;
-    }
-
-    // create handler method, GET request and return model and view
     @GetMapping("/admin/posts")
     public String posts(Model model){
         String role = SecurityUtils.getRole();
@@ -40,7 +37,6 @@ public class PostController {
         return "/admin/posts";
     }
 
-    // handler method to handle list comments request
     @GetMapping("/admin/posts/comments")
     public String postComments(Model model){
         String role = SecurityUtils.getRole();
@@ -54,14 +50,12 @@ public class PostController {
         return "admin/comments";
     }
 
-    // handler method to handle delete comment request
     @GetMapping("/admin/posts/comments/{commentId}")
     public String deleteComment(@PathVariable("commentId") Long commentId){
         commentService.deleteComment(commentId);
         return "redirect:/admin/posts/comments";
     }
 
-    // handler method to handle new post request
     @GetMapping("admin/posts/newpost")
     public String newPostForm(Model model){
         PostDto postDto = new PostDto();
@@ -71,7 +65,6 @@ public class PostController {
         return "admin/create_post";
     }
 
-    // handler method to handle form submit request
     @PostMapping("/admin/posts")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult result,
@@ -85,7 +78,6 @@ public class PostController {
         return "redirect:/admin/posts";
     }
 
-    // handler method to handle edit post request
     @GetMapping("/admin/posts/{postId}/edit")
     public String editPostForm(@PathVariable("postId") Long postId,
                                Model model){
@@ -95,7 +87,6 @@ public class PostController {
         return "admin/edit_post";
     }
 
-    // handler method to handle edit post form submit request
     @PostMapping("/admin/posts/{postId}")
     public String updatePost(@PathVariable("postId") Long postId,
                              @Valid @ModelAttribute("post") PostDto post,
@@ -111,14 +102,12 @@ public class PostController {
         return "redirect:/admin/posts";
     }
 
-    // handler method to handle delete post request
     @GetMapping("/admin/posts/{postId}/delete")
     public String deletePost(@PathVariable("postId") Long postId){
         postService.deletePost(postId);
         return "redirect:/admin/posts";
     }
 
-    // handler method to handle view post request
     @GetMapping("/admin/posts/{postUrl}/view")
     public String viewPost(@PathVariable("postUrl") String postUrl,
                            Model model){
@@ -128,8 +117,6 @@ public class PostController {
 
     }
 
-    // handler method to handle search blog posts request
-    // localhost:8080/admin/posts/search?query=java
     @GetMapping("/admin/posts/search")
     public String searchPosts(@RequestParam(value = "query") String query,
                               Model model){
@@ -139,8 +126,6 @@ public class PostController {
     }
 
     private static String getUrl(String postTitle){
-        // OOPS Concepts Explained in Java
-        // oops-concepts-explained-in-java
         String title = postTitle.trim().toLowerCase();
         String url = title.replaceAll("\\s+", "-");
         url = url.replaceAll("[^A-Za-z0-9]", "-");

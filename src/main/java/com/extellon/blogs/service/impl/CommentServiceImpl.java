@@ -10,25 +10,19 @@ import com.extellon.blogs.repository.PostRepository;
 import com.extellon.blogs.repository.UserRepository;
 import com.extellon.blogs.service.CommentService;
 import com.extellon.blogs.util.SecurityUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
     private PostRepository postRepository;
     private UserRepository userRepository;
-
-    public CommentServiceImpl(CommentRepository commentRepository,
-                              PostRepository postRepository,
-                              UserRepository userRepository) {
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void createComment(String postUrl, CommentDto commentDto) {
